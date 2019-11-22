@@ -47,6 +47,8 @@ function processObject (obj, options) {
   var parentIdType = options.parentTableIdType
 
   // In-memory storage
+
+  obj = obj || {}
   var keys = Object.keys(obj)
   var output = []
   var tables = []
@@ -159,7 +161,16 @@ module.exports = function Process (tableName, object) {
     tableName = 'generic'
   }
 
-  return processObject(object, {
+  type = Type.string(object).toLowerCase();
+
+  if(type === 'object' && Object.keys(object).length === 1){
+    
+    tableName = Object.keys(object)[0];
+    
+    object = object[tableName];
+  }
+
+  return processObject(object, options = {
     tableName: tableName
   }).join('\n')
 }
